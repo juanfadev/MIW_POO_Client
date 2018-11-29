@@ -1,7 +1,7 @@
 import NetworkService from './NetworkService.mjs'
 
 
-const phpURL = "http://miwpoophp.herokuapp.com/index.php";
+const phpURL = "https://miwpoophp.herokuapp.com/index.php";
 const nodeURL = "http://localhost:3000";
 const pythonURL = "https://miwpooflask.herokuapp.com";
 
