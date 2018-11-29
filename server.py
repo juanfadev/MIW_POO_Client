@@ -1,14 +1,12 @@
-import SimpleHTTPServer
-import SocketServer
+import http.server
+import socketserver
 
 PORT = 80
 
-class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
-    pass
+Handler = http.server.SimpleHTTPRequestHandler
 
 Handler.extensions_map['.mjs'] = 'application/javascript'
 
-httpd = SocketServer.TCPServer(("", PORT), Handler)
-
-print ("serving at port", PORT)
-httpd.serve_forever()
+with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    print("serving at port", PORT)
+    httpd.serve_forever()
