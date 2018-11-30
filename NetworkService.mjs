@@ -5,9 +5,9 @@ const SCHEMA = "LandmarksOrHistoricalBuildings"
 const PLACES = "Places"
 //const API_KEY = "?api-key=GET-YOUR-FREE-API-KEY:)"
 
-class NetworkService {
+export default class NetworkService {
 
-  constructor(baseUrl){
+  constructor(baseUrl) {
     this.baseUrl = baseUrl;
   }
 
@@ -65,6 +65,16 @@ class NetworkService {
     let url = `${this.baseUrl}/${PLACES}/${id}`
     return RequestService.deleteRequest(url, true, data);
   }
-}
 
-export default new NetworkService(BASE_URL)
+  /**
+   * JSON Validation against NodeJS validation service using Google Structured Data Testing Tool
+   * @param data 
+   */
+  validateJSON(data) {
+    RequestService.postRequest(`${BASE_URL}/validate`, true, data)
+      .then(res => {
+        alert(`Errors: ${res.totalNumErrors}
+        Warnings: ${res.totalNumWarnings}`);
+      })
+  }
+}

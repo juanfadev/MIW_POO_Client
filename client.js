@@ -1,11 +1,11 @@
 import NetworkService from './NetworkService.mjs'
 
 
-const phpURL = "http://miwpoophp.herokuapp.com/index.php";
-const nodeURL = "http://localhost:3000";
+const phpURL = "https://miwpoophp.herokuapp.com/index.php";
+const nodeURL = "https://miwpoonode.herokuapp.com/";
 const pythonURL = "https://miwpooflask.herokuapp.com";
 
-NetworkService.baseUrl = phpURL;
+let networkService = new NetworkService(phpURL);
 
 document.addEventListener("DOMContentLoaded", () => {
     loadEntities();
@@ -14,16 +14,16 @@ document.addEventListener("DOMContentLoaded", () => {
 document.getElementById("serverSelect").addEventListener("change", () => {
     switch (document.getElementById("serverSelect").value) {
         case "php":
-            NetworkService.baseUrl = phpURL;
+            networkService = new NetworkService(phpURL);
             break;
         case "node":
-            NetworkService.baseUrl = nodeURL;
+            networkService = new NetworkService(nodeURL);
             break;
         case "python":
-            NetworkService.baseUrl = pythonURL;
+            networkService = new NetworkService(pythonURL);
             break;
         default:
-            NetworkService.baseUrl = phpURL;
+            networkService = new NetworkService(phpURL);
             break;
     }
     removeCSSClassCurrent();
@@ -51,9 +51,12 @@ document.getElementById("placesNav").addEventListener("click", () => {
     document.getElementById("placesNav").parentNode.classList.add('current');
 });
 
+
+
+
 function loadLandmarks() {
     console.log("Fetching data");
-    NetworkService.getAllLandmarks()
+    networkService.getAllLandmarks()
         .then(data => {
             console.log(data);
             let articles = document.getElementById("articles");
@@ -70,7 +73,7 @@ function loadLandmarks() {
 
 function loadPlaces() {
     console.log("Fetching data");
-    NetworkService.getAllPlaces()
+    networkService.getAllPlaces()
         .then(data => {
             console.log(data);
             let articles = document.getElementById("articles");
@@ -86,7 +89,7 @@ function loadPlaces() {
 
 function loadEntities() {
     console.log("Fetching data");
-    NetworkService.getTemplates().then(data => {
+    networkService.getTemplates().then(data => {
         console.log(data);
         let articles = document.getElementById("articles");
         removeChildren(articles);
@@ -104,10 +107,15 @@ function loadEntity(json) {
     <h2><a href="#">${json['@type']}</a></h2><p>JSON-LD</p></header>`
     let text = document.createElement('textarea');
     text.value = JSON.stringify(json, undefined, 2);
+    text.id = `textarea${json["@type"]}`
     let button = document.createElement('input');
     button.type = "button";
     button.value = "Create";
     button.id = `create${json["@type"]}`
+    button.addEventListener("click", () => {
+        let jsonVal = JSON.parse(document.getElementById(`textarea${json["@type"]}`).value);
+        createEntity(jsonVal);
+    });
     article.appendChild(text);
     article.appendChild(button);
     articles.appendChild(article);
@@ -144,7 +152,7 @@ function loadArticle(json, id) {
     button.value = "Edit";
     button.id = `edit${json["@type"]}`
     button.addEventListener("click", () => {
-        loadEditForm(id);
+        loadEditForm(id,json["@type"]);
     });
     let button2 = document.createElement('input');
     button2.type = "button";
@@ -168,8 +176,19 @@ function removeCSSClassCurrent() {
     document.querySelector("nav > ul > li.current").classList.remove('current');
 }
 
-function loadEditForm(id) {
-    NetworkService.getLandMark(id).then(json => {
+function loadEditForm(id, type) {
+    let getEntity;
+    switch (type) {
+        case "LandmarksOrHistoricalBuildings":
+            getEntity = networkService.getLandMark(id);
+            break;
+        case "Place":
+            getEntity = networkService.getPlace(id);
+            break;
+        default:
+            break;
+    }
+    getEntity.then(json => {
         console.log(json);
         let articles = document.getElementById("articles");
         removeChildren(articles);
@@ -199,7 +218,7 @@ function deleteEntity(json, id) {
     if (window.confirm(`Do you really want to update ${json["@type"]}/${id}?`)) {
         switch (json["@type"]) {
             case "LandmarksOrHistoricalBuildings":
-                NetworkService.deleteLandMark(json, id).then((a) => {
+                networkService.deleteLandMark(json, id).then((a) => {
                     alert("Deleted landmark.");
                     removeCSSClassCurrent();
                     loadLandmarks();
@@ -207,7 +226,7 @@ function deleteEntity(json, id) {
                 });
                 break;
             case "Places":
-                NetworkService.deletePlace(json, id)
+                networkService.deletePlace(json, id)
                 break;
             default:
                 alert("No entity could be deleted.");
@@ -218,19 +237,41 @@ function deleteEntity(json, id) {
 
 function updateEntity(id) {
     let json = JSON.parse(document.getElementById("updateTextArea").value);
+    networkService.validateJSON(json);
     switch (json["@type"]) {
         case "LandmarksOrHistoricalBuildings":
-            NetworkService.putLandMark(json, id);
+            networkService.putLandMark(json, id);
             alert("Updated landmark.");
             removeCSSClassCurrent();
             loadLandmarks();
             document.getElementById("landmarksNav").parentNode.classList.add('current');
             break;
         case "Places":
-            NetworkService.putPlace(json, id)
+            networkService.putPlace(json, id)
+            removeCSSClassCurrent();
+            loadLandmarks();
+            document.getElementById("placesNav").parentNode.classList.add('current');
             break;
         default:
             alert(`No entity ${json["@type"]} could be updated.`);
+            break;
+    }
+}
+
+function createEntity(json){
+    switch (json["@type"]) {
+        case "LandmarksOrHistoricalBuildings":
+            networkService.postLandMark(json);
+            alert("Created landmark.");
+            loadEntities();
+            break;
+        case "Places":
+            networkService.postPlace(json)
+            alert("Created place.");
+            loadEntities();
+            break;
+        default:
+            alert(`No entity ${json["@type"]} could be created.`);
             break;
     }
 }
