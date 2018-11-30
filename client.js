@@ -263,7 +263,7 @@ function updateEntity(id) {
 }
 
 function createEntity(json) {
-    if (window.confirm(`Do you really want to create ${json["@type"]}?`) && networkService.validateJSON(json))
+    if (window.confirm(`Do you really want to create ${json["@type"]}?`) && networkService.validateJSON(json)) {
         switch (json["@type"]) {
             case "LandmarksOrHistoricalBuildings":
                 networkService.postLandMark(json);
@@ -278,7 +278,8 @@ function createEntity(json) {
             default:
                 alert(`No entity ${json["@type"]} could be created.`);
                 break;
-        } else {
+        }
+    } else {
         alert(`Entity ${json["@type"]} not created.`);
     }
 }
