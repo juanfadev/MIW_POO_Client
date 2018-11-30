@@ -257,7 +257,6 @@ function updateEntity(id) {
             break;
     }
 }
-<<<<<<< HEAD
 
 function createEntity(json){
     switch (json["@type"]) {
@@ -276,5 +275,3 @@ function createEntity(json){
             break;
     }
 }
-=======
->>>>>>> 63f4a6dea1bbea310f426e1b2f62441f5361f9ec
