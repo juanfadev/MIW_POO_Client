@@ -1,6 +1,6 @@
 import RequestService from './RequestService.mjs'
 
-const BASE_URL = "http://localhost:3000"
+const BASE_URL = "https://miwpoonode.herokuapp.com"
 const SCHEMA = "LandmarksOrHistoricalBuildings"
 const PLACES = "Places"
 //const API_KEY = "?api-key=GET-YOUR-FREE-API-KEY:)"
@@ -73,8 +73,12 @@ export default class NetworkService {
   validateJSON(data) {
     RequestService.postRequest(`${BASE_URL}/validate`, true, data)
       .then(res => {
-        alert(`Errors: ${res.totalNumErrors}
-        Warnings: ${res.totalNumWarnings}`);
-      })
+        alert(`Errors: ${res.totalNumErrors} Warnings: ${res.totalNumWarnings}`);
+        if (res.totalNumErrors == 0 && res.totalNumWarnings == 0) {
+          return true;
+        } else {
+          return false;
+        }
+      });
   }
 }

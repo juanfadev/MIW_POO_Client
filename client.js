@@ -5,9 +5,10 @@ const phpURL = "https://miwpoophp.herokuapp.com/index.php";
 const nodeURL = "https://miwpoonode.herokuapp.com";
 const pythonURL = "https://miwpooflask.herokuapp.com";
 
-let networkService = new NetworkService(phpURL);
+let networkService = '';
 
 document.addEventListener("DOMContentLoaded", () => {
+    networkService = new NetworkService(phpURL);
     loadEntities();
 });
 
@@ -50,8 +51,6 @@ document.getElementById("placesNav").addEventListener("click", () => {
     loadPlaces();
     document.getElementById("placesNav").parentNode.classList.add('current');
 });
-
-
 
 
 function loadLandmarks() {
@@ -124,7 +123,7 @@ function loadEntity(json) {
 function loadArticle(json, id) {
     console.log("LoadArticles");
     console.log(json);
-    console.log("ID:" +id);
+    console.log("ID:" + id);
     let articles = document.getElementById("articles");
     let article = document.createElement('article');
     article.classList.add('box');
@@ -152,7 +151,7 @@ function loadArticle(json, id) {
     button.value = "Edit";
     button.id = `edit${json["@type"]}`
     button.addEventListener("click", () => {
-        loadEditForm(id,json["@type"]);
+        loadEditForm(id, json["@type"]);
     });
     let button2 = document.createElement('input');
     button2.type = "button";
@@ -215,7 +214,7 @@ function loadEditForm(id, type) {
 }
 
 function deleteEntity(json, id) {
-    if (window.confirm(`Do you really want to update ${json["@type"]}/${id}?`)) {
+    if (window.confirm(`Do you really want to delete ${json["@type"]}/${id}?`)) {
         switch (json["@type"]) {
             case "LandmarksOrHistoricalBuildings":
                 networkService.deleteLandMark(json, id).then((a) => {
@@ -232,46 +231,54 @@ function deleteEntity(json, id) {
                 alert("No entity could be deleted.");
                 break;
         }
+    } else {
+        alert("Entity not deleted!");
     }
 }
 
 function updateEntity(id) {
     let json = JSON.parse(document.getElementById("updateTextArea").value);
-    networkService.validateJSON(json);
-    switch (json["@type"]) {
-        case "LandmarksOrHistoricalBuildings":
-            networkService.putLandMark(json, id);
-            alert("Updated landmark.");
-            removeCSSClassCurrent();
-            loadLandmarks();
-            document.getElementById("landmarksNav").parentNode.classList.add('current');
-            break;
-        case "Places":
-            networkService.putPlace(json, id)
-            removeCSSClassCurrent();
-            loadLandmarks();
-            document.getElementById("placesNav").parentNode.classList.add('current');
-            break;
-        default:
-            alert(`No entity ${json["@type"]} could be updated.`);
-            break;
+    if (window.confirm(`Do you really want to update ${json["@type"]}/${id}?`) && networkService.validateJSON(json)) {
+        switch (json["@type"]) {
+            case "LandmarksOrHistoricalBuildings":
+                networkService.putLandMark(json, id);
+                alert("Updated landmark.");
+                removeCSSClassCurrent();
+                loadLandmarks();
+                document.getElementById("landmarksNav").parentNode.classList.add('current');
+                break;
+            case "Places":
+                networkService.putPlace(json, id)
+                removeCSSClassCurrent();
+                loadLandmarks();
+                document.getElementById("placesNav").parentNode.classList.add('current');
+                break;
+            default:
+                alert(`No entity ${json["@type"]} could be updated.`);
+                break;
+        }
+    } else {
+        alert(`Entity ${json["@type"]} not updated.`);
     }
 }
 
-function createEntity(json){
-    switch (json["@type"]) {
-        case "LandmarksOrHistoricalBuildings":
-            networkService.postLandMark(json);
-            alert("Created landmark.");
-            loadEntities();
-            break;
-        case "Places":
-            networkService.postPlace(json)
-            alert("Created place.");
-            loadEntities();
-            break;
-        default:
-            alert(`No entity ${json["@type"]} could be created.`);
-            break;
+function createEntity(json) {
+    if (window.confirm(`Do you really want to create ${json["@type"]}?`) && networkService.validateJSON(json))
+        switch (json["@type"]) {
+            case "LandmarksOrHistoricalBuildings":
+                networkService.postLandMark(json);
+                alert("Created landmark.");
+                loadEntities();
+                break;
+            case "Places":
+                networkService.postPlace(json)
+                alert("Created place.");
+                loadEntities();
+                break;
+            default:
+                alert(`No entity ${json["@type"]} could be created.`);
+                break;
+        } else {
+        alert(`Entity ${json["@type"]} not created.`);
     }
 }
