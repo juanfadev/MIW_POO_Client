@@ -2,7 +2,7 @@ import NetworkService from './NetworkService.mjs'
 
 
 const phpURL = "https://miwpoophp.herokuapp.com/index.php";
-const nodeURL = "https://miwpoonode.herokuapp.com/";
+const nodeURL = "https://miwpoonode.herokuapp.com";
 const pythonURL = "https://miwpooflask.herokuapp.com";
 
 let networkService = new NetworkService(phpURL);
@@ -257,6 +257,7 @@ function updateEntity(id) {
             break;
     }
 }
+<<<<<<< HEAD
 
 function createEntity(json){
     switch (json["@type"]) {
@@ -275,3 +276,5 @@ function createEntity(json){
             break;
     }
 }
+=======
+>>>>>>> 63f4a6dea1bbea310f426e1b2f62441f5361f9ec
