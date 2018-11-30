@@ -224,7 +224,7 @@ function deleteEntity(json, id) {
                     document.getElementById("landmarksNav").parentNode.classList.add('current');
                 });
                 break;
-            case "Places":
+            case "Place":
                 networkService.deletePlace(json, id)
                 break;
             default:
@@ -247,7 +247,7 @@ function updateEntity(id) {
                 loadLandmarks();
                 document.getElementById("landmarksNav").parentNode.classList.add('current');
                 break;
-            case "Places":
+            case "Place":
                 networkService.putPlace(json, id)
                 removeCSSClassCurrent();
                 loadLandmarks();
@@ -270,7 +270,7 @@ function createEntity(json) {
                 alert("Created landmark.");
                 loadEntities();
                 break;
-            case "Places":
+            case "Place":
                 networkService.postPlace(json)
                 alert("Created place.");
                 loadEntities();
