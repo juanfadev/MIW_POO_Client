@@ -71,7 +71,7 @@ export default class NetworkService {
    * @param data 
    */
   validateJSON(data) {
-    RequestService.postRequest(`${BASE_URL}/validate`, true, data)
+    return RequestService.postRequest(`${BASE_URL}/validate`, true, data)
       .then(res => {
         alert(`Errors: ${res.totalNumErrors} Warnings: ${res.totalNumWarnings}`);
         if (res.totalNumErrors == 0 && res.totalNumWarnings == 0) {
