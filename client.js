@@ -263,23 +263,27 @@ function updateEntity(id) {
 }
 
 function createEntity(json) {
-    if (window.confirm(`Do you really want to create ${json["@type"]}?`) && networkService.validateJSON(json)) {
-        switch (json["@type"]) {
-            case "LandmarksOrHistoricalBuildings":
-                networkService.postLandMark(json);
-                alert("Created landmark.");
-                loadEntities();
-                break;
-            case "Place":
-                networkService.postPlace(json)
-                alert("Created place.");
-                loadEntities();
-                break;
-            default:
-                alert(`No entity ${json["@type"]} could be created.`);
-                break;
-        }
-    } else {
-        alert(`Entity ${json["@type"]} not created.`);
+    if (window.confirm(`Do you really want to create ${json["@type"]}?`) {
+        networkService.validateJSON(json).then((data) => {
+            if (data) {
+                switch (json["@type"]) {
+                    case "LandmarksOrHistoricalBuildings":
+                        networkService.postLandMark(json);
+                        alert("Created landmark.");
+                        loadEntities();
+                        break;
+                    case "Place":
+                        networkService.postPlace(json)
+                        alert("Created place.");
+                        loadEntities();
+                        break;
+                    default:
+                        alert(`No entity ${json["@type"]} could be created.`);
+                        break;
+                }
+            } else {
+                alert(`Entity ${json["@type"]} not created.`);
+            }
+        });
     }
 }
