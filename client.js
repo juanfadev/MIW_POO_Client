@@ -62,7 +62,7 @@ function loadLandmarks() {
             removeChildren(articles);
             try {
                 data.forEach(j => loadArticle(j, data.indexOf(j)));
-            } catch{
+            } catch {
                 loadArticle(data);
             }
         })
@@ -79,7 +79,7 @@ function loadPlaces() {
             removeChildren(articles);
             try {
                 data.forEach(j => loadArticle(j, data.indexOf(j)));
-            } catch{
+            } catch {
                 loadArticle(data);
             }
         })
@@ -240,26 +240,27 @@ function updateEntity(id) {
     let json = JSON.parse(document.getElementById("updateTextArea").value);
     if (window.confirm(`Do you really want to create ${json["@type"]}?`)) {
         networkService.validateJSON(json).then((data) => {
-        switch (json["@type"]) {
-            case "LandmarksOrHistoricalBuildings":
-                networkService.putLandMark(json, id);
-                alert("Updated landmark.");
-                removeCSSClassCurrent();
-                loadLandmarks();
-                document.getElementById("landmarksNav").parentNode.classList.add('current');
-                break;
-            case "Place":
-                networkService.putPlace(json, id)
-                removeCSSClassCurrent();
-                loadLandmarks();
-                document.getElementById("placesNav").parentNode.classList.add('current');
-                break;
-            default:
-                alert(`No entity ${json["@type"]} could be updated.`);
-                break;
+            if (data) {
+                switch (json["@type"]) {
+                    case "LandmarksOrHistoricalBuildings":
+                        networkService.putLandMark(json, id);
+                        alert("Updated landmark.");
+                        removeCSSClassCurrent();
+                        loadLandmarks();
+                        document.getElementById("landmarksNav").parentNode.classList.add('current');
+                        break;
+                    case "Place":
+                        networkService.putPlace(json, id)
+                        removeCSSClassCurrent();
+                        loadLandmarks();
+                        document.getElementById("placesNav").parentNode.classList.add('current');
+                        break;
+                    default:
+                        alert(`No entity ${json["@type"]} could be updated.`);
+                        break;
                 }
             }
-        ); 
+        });
     } else {
         alert(`Entity ${json["@type"]} not updated.`);
     }
@@ -285,8 +286,8 @@ function createEntity(json) {
                         break;
                 }
             }
-        ); 
+        });
     } else {
-            alert(`Entity ${json["@type"]} not created.`);
+        alert(`Entity ${json["@type"]} not created.`);
     }
 }
