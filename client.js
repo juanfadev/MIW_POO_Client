@@ -220,7 +220,7 @@ function deleteEntity(json, id) {
                 networkService.deleteLandMark(json, id).then((a) => {
                     alert("Deleted landmark.");
                     removeCSSClassCurrent();
-                    loadLandmarks();
+                    loadEntities();
                     document.getElementById("landmarksNav").parentNode.classList.add('current');
                 });
                 break;
@@ -246,13 +246,13 @@ function updateEntity(id) {
                         networkService.putLandMark(json, id);
                         alert("Updated landmark.");
                         removeCSSClassCurrent();
-                        loadLandmarks();
+                        loadEntities();
                         document.getElementById("landmarksNav").parentNode.classList.add('current');
                         break;
                     case "Place":
                         networkService.putPlace(json, id)
                         removeCSSClassCurrent();
-                        loadLandmarks();
+                        loadEntities();
                         document.getElementById("placesNav").parentNode.classList.add('current');
                         break;
                     default:
@@ -274,11 +274,13 @@ function createEntity(json) {
                     case "LandmarksOrHistoricalBuildings":
                         networkService.postLandMark(json);
                         alert("Created landmark.");
+                        removeCSSClassCurrent();
                         loadEntities();
                         break;
                     case "Place":
                         networkService.postPlace(json)
                         alert("Created place.");
+                        removeCSSClassCurrent();
                         loadEntities();
                         break;
                     default:
