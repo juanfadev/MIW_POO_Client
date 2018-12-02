@@ -93,6 +93,7 @@ function loadEntities() {
         let articles = document.getElementById("articles");
         removeChildren(articles);
         data.forEach(j => loadEntity(j));
+        document.getElementById("entitiesNav").parentNode.classList.add('current');
     }).catch(reason => alert("Error on loading entities " + reason.message))
 }
 
@@ -221,7 +222,6 @@ function deleteEntity(json, id) {
                     alert("Deleted landmark.");
                     removeCSSClassCurrent();
                     loadEntities();
-                    document.getElementById("landmarksNav").parentNode.classList.add('current');
                 });
                 break;
             case "Place":
@@ -247,13 +247,11 @@ function updateEntity(id) {
                         alert("Updated landmark.");
                         removeCSSClassCurrent();
                         loadEntities();
-                        document.getElementById("landmarksNav").parentNode.classList.add('current');
                         break;
                     case "Place":
                         networkService.putPlace(json, id)
                         removeCSSClassCurrent();
                         loadEntities();
-                        document.getElementById("placesNav").parentNode.classList.add('current');
                         break;
                     default:
                         alert(`No entity ${json["@type"]} could be updated.`);
