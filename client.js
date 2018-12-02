@@ -238,7 +238,8 @@ function deleteEntity(json, id) {
 
 function updateEntity(id) {
     let json = JSON.parse(document.getElementById("updateTextArea").value);
-    if (window.confirm(`Do you really want to update ${json["@type"]}/${id}?`) && networkService.validateJSON(json)) {
+    if (window.confirm(`Do you really want to create ${json["@type"]}?`)) {
+        networkService.validateJSON(json).then((data) => {
         switch (json["@type"]) {
             case "LandmarksOrHistoricalBuildings":
                 networkService.putLandMark(json, id);
@@ -256,14 +257,15 @@ function updateEntity(id) {
             default:
                 alert(`No entity ${json["@type"]} could be updated.`);
                 break;
-        }
-    } else {
-        alert(`Entity ${json["@type"]} not updated.`);
-    }
+                }
+            } else {
+                alert(`Entity ${json["@type"]} not updated.`);
+            }
+        });
 }
 
 function createEntity(json) {
-    if (window.confirm(`Do you really want to create ${json["@type"]}?`) {
+    if (window.confirm(`Do you really want to create ${json["@type"]}?`)) {
         networkService.validateJSON(json).then((data) => {
             if (data) {
                 switch (json["@type"]) {
