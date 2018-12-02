@@ -258,10 +258,11 @@ function updateEntity(id) {
                 alert(`No entity ${json["@type"]} could be updated.`);
                 break;
                 }
-            } else {
-                alert(`Entity ${json["@type"]} not updated.`);
             }
-        });
+        ); 
+    } else {
+        alert(`Entity ${json["@type"]} not updated.`);
+    }
 }
 
 function createEntity(json) {
@@ -283,9 +284,9 @@ function createEntity(json) {
                         alert(`No entity ${json["@type"]} could be created.`);
                         break;
                 }
-            } else {
-                alert(`Entity ${json["@type"]} not created.`);
             }
-        });
+        ); 
+    } else {
+            alert(`Entity ${json["@type"]} not created.`);
     }
 }
