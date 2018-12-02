@@ -52,6 +52,11 @@ document.getElementById("placesNav").addEventListener("click", () => {
     document.getElementById("placesNav").parentNode.classList.add('current');
 });
 
+document.getElementById("contactNav").addEventListener("click", () => {
+    removeCSSClassCurrent();
+    loadContactForm();
+    document.getElementById("contactNav").parentNode.classList.add('current');
+});
 
 function loadLandmarks() {
     console.log("Fetching data");
@@ -290,4 +295,20 @@ function createEntity(json) {
     } else {
         alert(`Entity ${json["@type"]} not created.`);
     }
+}
+
+function loadContactForm() {
+    let articles = document.getElementById("articles");
+    removeChildren(articles);
+    let article = document.createElement('article');
+    article.classList.add('box');
+    article.innerHTML = `<h3>Contact form</h3>
+        <form method="POST">
+            <input type="email" name="email" placeholder="E-mail" />
+            <input type="text" name="name" placeholder="Name" />
+            <input type="text" name="surname" placeholder="Surname" />
+            <textarea name="description" placeholder="About me"></textarea>
+            <input type="submit" name="Submit" />
+        </form>`
+    articles.appendChild(article);
 }
