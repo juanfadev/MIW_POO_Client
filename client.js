@@ -303,7 +303,7 @@ function loadContactForm() {
     let article = document.createElement('article');
     article.classList.add('box');
     article.innerHTML = `<h3>Contact form</h3>
-        <form method="POST" action="javascript:alert("Contact form sent");">
+        <form method="POST" action="javascript:alert('Contact form sent');">
             <input type="email" name="email" placeholder="E-mail" required/>
             <input type="text" name="name" placeholder="Name" required/>
             <input type="text" name="surname" placeholder="Surname" required/>
