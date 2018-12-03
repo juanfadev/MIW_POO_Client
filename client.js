@@ -303,11 +303,11 @@ function loadContactForm() {
     let article = document.createElement('article');
     article.classList.add('box');
     article.innerHTML = `<h3>Contact form</h3>
-        <form method="POST">
-            <input type="email" name="email" placeholder="E-mail" />
-            <input type="text" name="name" placeholder="Name" />
-            <input type="text" name="surname" placeholder="Surname" />
-            <textarea name="description" placeholder="About me"></textarea>
+        <form method="POST" action="javascript:alert("Contact form sent");">
+            <input type="email" name="email" placeholder="E-mail" required/>
+            <input type="text" name="name" placeholder="Name" required/>
+            <input type="text" name="surname" placeholder="Surname" required/>
+            <textarea name="description" placeholder="About me" required></textarea>
             <input type="submit" name="Submit" />
         </form>`
     articles.appendChild(article);
